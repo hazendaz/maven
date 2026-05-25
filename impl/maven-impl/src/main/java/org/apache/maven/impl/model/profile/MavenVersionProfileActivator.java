@@ -80,7 +80,7 @@ public class MavenVersionProfileActivator implements ProfileActivator {
                     BuilderProblem.Severity.WARNING,
                     ModelProblem.Version.BASE,
                     "Failed to determine Maven activation for profile " + profile.getId()
-                            + " due to invalid Maven version: '" + version + "'",
+                            + " due to invalid Maven version/range: '" + version + "' / '" + maven + "'",
                     activation.getLocation("maven"),
                     e);
             return false;
@@ -169,6 +169,8 @@ public class MavenVersionProfileActivator implements ProfileActivator {
                 ranges.add(new RangeValue(token.replace(")", ""), false));
             } else if (token.isEmpty()) {
                 ranges.add(new RangeValue("", false));
+            } else {
+                throw new NumberFormatException("Invalid Maven version range: " + range);
             }
         }
         if (ranges.size() < 2) {
