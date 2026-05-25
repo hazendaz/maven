@@ -44,6 +44,9 @@ import org.apache.maven.model.profile.ProfileActivationContext;
 @Deprecated(since = "4.0.0")
 public class MavenVersionProfileActivator implements ProfileActivator {
 
+    private static final int MAX_VERSION_TOKENS = 3;
+
+    // Synthetic high upper bound used when the configured range has no explicit upper limit.
     private static final String MAX_VERSION_PLACEHOLDER = "99999999";
 
     private static final Pattern FILTER_1 = Pattern.compile("[^\\d._-]");
@@ -127,10 +130,10 @@ public class MavenVersionProfileActivator implements ProfileActivator {
         List<String> valueTokens = new ArrayList<>(Arrays.asList(FILTER_2.split(value)));
         List<String> rangeValueTokens = new ArrayList<>(Arrays.asList(FILTER_3.split(rangeValue.value)));
 
-        addZeroTokens(valueTokens, 3);
-        addZeroTokens(rangeValueTokens, 3);
+        addZeroTokens(valueTokens, MAX_VERSION_TOKENS);
+        addZeroTokens(rangeValueTokens, MAX_VERSION_TOKENS);
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < MAX_VERSION_TOKENS; i++) {
             int x = Integer.parseInt(valueTokens.get(i));
             int y = Integer.parseInt(rangeValueTokens.get(i));
             if (x < y) {
