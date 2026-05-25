@@ -44,6 +44,8 @@ import org.apache.maven.model.profile.ProfileActivationContext;
 @Deprecated(since = "4.0.0")
 public class MavenVersionProfileActivator implements ProfileActivator {
 
+    private static final String MAX_VERSION_PLACEHOLDER = "99999999";
+
     private static final Pattern FILTER_1 = Pattern.compile("[^\\d._-]");
     private static final Pattern FILTER_2 = Pattern.compile("[._-]");
     private static final Pattern FILTER_3 = Pattern.compile("\\.");
@@ -170,7 +172,7 @@ public class MavenVersionProfileActivator implements ProfileActivator {
             }
         }
         if (ranges.size() < 2) {
-            ranges.add(new RangeValue("99999999", false));
+            ranges.add(new RangeValue(MAX_VERSION_PLACEHOLDER, false));
         }
         return ranges;
     }

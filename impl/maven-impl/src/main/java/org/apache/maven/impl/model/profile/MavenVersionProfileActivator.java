@@ -63,7 +63,7 @@ public class MavenVersionProfileActivator implements ProfileActivator {
         }
 
         try {
-            return JdkVersionProfileActivator.isJavaVersionCompatible(maven, version);
+            return isMavenVersionCompatible(maven, version);
         } catch (NumberFormatException e) {
             problems.add(
                     BuilderProblem.Severity.WARNING,
@@ -80,5 +80,9 @@ public class MavenVersionProfileActivator implements ProfileActivator {
     public boolean presentInConfig(Profile profile, ProfileActivationContext context, ModelProblemCollector problems) {
         Activation activation = profile.getActivation();
         return activation != null && activation.getMaven() != null;
+    }
+
+    private static boolean isMavenVersionCompatible(String requiredMavenRange, String currentMavenVersion) {
+        return JdkVersionProfileActivator.isJavaVersionCompatible(requiredMavenRange, currentMavenVersion);
     }
 }
