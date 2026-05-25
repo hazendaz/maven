@@ -44,7 +44,7 @@ public class MavenVersionProfileActivator implements ProfileActivator {
 
     private static final int MAX_VERSION_TOKENS = 3;
 
-    // Synthetic high upper bound used when the configured range has no explicit upper limit.
+    // "99999999" is a synthetic high upper bound used when the configured range has no explicit upper limit.
     private static final String MAX_VERSION_PLACEHOLDER = "99999999";
 
     private static final Pattern FILTER_1 = Pattern.compile("[^\\d._-]");
