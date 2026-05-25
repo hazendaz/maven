@@ -160,13 +160,13 @@ public class MavenVersionProfileActivator implements ProfileActivator {
 
         for (String token : range.split(",")) {
             if (token.startsWith("[")) {
-                ranges.add(new RangeValue(token.replace("[", ""), true));
+                ranges.add(new RangeValue(token.substring(1), true));
             } else if (token.startsWith("(")) {
-                ranges.add(new RangeValue(token.replace("(", ""), false));
+                ranges.add(new RangeValue(token.substring(1), false));
             } else if (token.endsWith("]")) {
-                ranges.add(new RangeValue(token.replace("]", ""), true));
+                ranges.add(new RangeValue(token.substring(0, token.length() - 1), true));
             } else if (token.endsWith(")")) {
-                ranges.add(new RangeValue(token.replace(")", ""), false));
+                ranges.add(new RangeValue(token.substring(0, token.length() - 1), false));
             } else if (token.isEmpty()) {
                 ranges.add(new RangeValue("", false));
             } else {
