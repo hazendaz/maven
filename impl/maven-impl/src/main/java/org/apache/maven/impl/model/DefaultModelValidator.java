@@ -179,6 +179,17 @@ public class DefaultModelValidator implements ModelValidator {
         }
 
         @Override
+        protected Activation.Builder transformActivation_Maven(
+                Supplier<? extends Activation.Builder> creator, Activation.Builder builder, Activation target) {
+            stk.push(nextFrame("maven"));
+            try {
+                return super.transformActivation_Maven(creator, builder, target);
+            } finally {
+                stk.pop();
+            }
+        }
+
+        @Override
         protected Activation.Builder transformActivation_Os(
                 Supplier<? extends Activation.Builder> creator, Activation.Builder builder, Activation target) {
             stk.push(nextFrame("os", Activation::getOs));
