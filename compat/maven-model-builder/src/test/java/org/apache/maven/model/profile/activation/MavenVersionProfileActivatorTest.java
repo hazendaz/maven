@@ -92,10 +92,12 @@ class MavenVersionProfileActivatorTest extends AbstractProfileActivatorTest<Mave
     }
 
     @Test
-    void testInvalidVersionRange() {
-        Profile profile = newProfile("[4,");
+    void testRubbishMavenVersion() {
+        Profile profile = newProfile("[4,)");
 
-        assertActivationWithProblems(profile, newContext(null, newProperties("4.0.0")), "invalid Maven version range");
+        assertActivationWithProblems(profile, newContext(null, newProperties("Pūteketeke")), "invalid Maven version");
+        assertActivationWithProblems(profile, newContext(null, newProperties("rubbish")), "invalid Maven version");
+        assertActivationWithProblems(profile, newContext(null, newProperties("4.a.0")), "invalid Maven version");
     }
 
     private void assertActivationWithProblems(

@@ -23,7 +23,6 @@ import java.util.Map;
 import org.apache.maven.api.model.Activation;
 import org.apache.maven.api.model.Profile;
 import org.apache.maven.api.services.model.ProfileActivationContext;
-import org.apache.maven.impl.DefaultVersionParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +38,7 @@ class MavenVersionProfileActivatorTest extends AbstractProfileActivatorTest<Mave
     @Override
     @BeforeEach
     void setUp() {
-        activator = new MavenVersionProfileActivator(new DefaultVersionParser());
+        activator = new MavenVersionProfileActivator();
     }
 
     private Profile newProfile(String mavenVersion) {
@@ -89,10 +88,12 @@ class MavenVersionProfileActivatorTest extends AbstractProfileActivatorTest<Mave
     }
 
     @Test
-    void testInvalidVersionRange() {
-        Profile profile = newProfile("[4,");
+    void testRubbishMavenVersion() {
+        Profile profile = newProfile("[4,)");
 
-        assertActivationWithProblems(profile, newContext(null, newProperties("4.0.0")), "invalid Maven version range");
+        assertActivationWithProblems(profile, newContext(null, newProperties("Pūteketeke")), "invalid Maven version");
+        assertActivationWithProblems(profile, newContext(null, newProperties("rubbish")), "invalid Maven version");
+        assertActivationWithProblems(profile, newContext(null, newProperties("4.a.0")), "invalid Maven version");
     }
 
     private void assertActivationWithProblems(

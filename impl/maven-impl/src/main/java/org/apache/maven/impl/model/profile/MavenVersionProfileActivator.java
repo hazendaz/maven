@@ -18,7 +18,6 @@
  */
 package org.apache.maven.impl.model.profile;
 
-import org.apache.maven.api.di.Inject;
 import org.apache.maven.api.di.Named;
 import org.apache.maven.api.di.Singleton;
 import org.apache.maven.api.model.Activation;
@@ -26,7 +25,6 @@ import org.apache.maven.api.model.Profile;
 import org.apache.maven.api.services.BuilderProblem;
 import org.apache.maven.api.services.ModelProblem;
 import org.apache.maven.api.services.ModelProblemCollector;
-import org.apache.maven.api.services.VersionParser;
 import org.apache.maven.api.services.model.ProfileActivationContext;
 import org.apache.maven.api.services.model.ProfileActivator;
 
@@ -38,13 +36,6 @@ import org.apache.maven.api.services.model.ProfileActivator;
 @Named("maven-version")
 @Singleton
 public class MavenVersionProfileActivator implements ProfileActivator {
-
-    private final VersionParser versionParser;
-
-    @Inject
-    public MavenVersionProfileActivator(VersionParser versionParser) {
-        this.versionParser = versionParser;
-    }
 
     @Override
     public boolean isActive(Profile profile, ProfileActivationContext context, ModelProblemCollector problems) {
@@ -71,23 +62,17 @@ public class MavenVersionProfileActivator implements ProfileActivator {
             return false;
         }
 
-        if (maven.startsWith("!")) {
-            return !version.startsWith(maven.substring(1));
-        } else if (isRange(maven)) {
-            try {
-                return versionParser.parseVersionRange(maven).contains(versionParser.parseVersion(version));
-            } catch (IllegalArgumentException e) {
-                problems.add(
-                        BuilderProblem.Severity.WARNING,
-                        ModelProblem.Version.BASE,
-                        "Failed to determine Maven activation for profile " + profile.getId()
-                                + " due invalid Maven version range: '" + maven + "'",
-                        activation.getLocation("maven"),
-                        e);
-                return false;
-            }
-        } else {
-            return version.startsWith(maven);
+        try {
+            return JdkVersionProfileActivator.isJavaVersionCompatible(maven, version);
+        } catch (NumberFormatException e) {
+            problems.add(
+                    BuilderProblem.Severity.WARNING,
+                    ModelProblem.Version.BASE,
+                    "Failed to determine Maven activation for profile " + profile.getId()
+                            + " due invalid Maven version: '" + version + "'",
+                    activation.getLocation("maven"),
+                    e);
+            return false;
         }
     }
 
@@ -95,9 +80,5 @@ public class MavenVersionProfileActivator implements ProfileActivator {
     public boolean presentInConfig(Profile profile, ProfileActivationContext context, ModelProblemCollector problems) {
         Activation activation = profile.getActivation();
         return activation != null && activation.getMaven() != null;
-    }
-
-    private static boolean isRange(String value) {
-        return value.startsWith("[") || value.startsWith("(");
     }
 }
