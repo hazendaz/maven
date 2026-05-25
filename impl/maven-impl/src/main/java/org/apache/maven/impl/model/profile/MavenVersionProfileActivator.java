@@ -49,7 +49,6 @@ public class MavenVersionProfileActivator implements ProfileActivator {
 
     private static final Pattern FILTER_1 = Pattern.compile("[^\\d._-]");
     private static final Pattern FILTER_2 = Pattern.compile("[._-]");
-    private static final Pattern FILTER_3 = Pattern.compile("\\.");
 
     @Override
     public boolean isActive(Profile profile, ProfileActivationContext context, ModelProblemCollector problems) {
@@ -126,9 +125,10 @@ public class MavenVersionProfileActivator implements ProfileActivator {
         }
 
         value = FILTER_1.matcher(value).replaceAll("");
+        String rangeValueString = FILTER_1.matcher(rangeValue.value).replaceAll("");
 
         List<String> valueTokens = new ArrayList<>(Arrays.asList(FILTER_2.split(value)));
-        List<String> rangeValueTokens = new ArrayList<>(Arrays.asList(FILTER_3.split(rangeValue.value)));
+        List<String> rangeValueTokens = new ArrayList<>(Arrays.asList(FILTER_2.split(rangeValueString)));
 
         addZeroTokens(valueTokens, MAX_VERSION_TOKENS);
         addZeroTokens(rangeValueTokens, MAX_VERSION_TOKENS);
