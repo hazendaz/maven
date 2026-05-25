@@ -201,10 +201,5 @@ public class MavenVersionProfileActivator implements ProfileActivator {
             this.value = value.trim();
             this.closed = closed;
         }
-
-        @Override
-        public String toString() {
-            return value;
-        }
     }
 }
