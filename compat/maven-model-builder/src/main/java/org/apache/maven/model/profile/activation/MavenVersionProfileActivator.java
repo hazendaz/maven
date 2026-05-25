@@ -79,7 +79,7 @@ public class MavenVersionProfileActivator implements ProfileActivator {
         } catch (NumberFormatException e) {
             problems.add(new ModelProblemCollectorRequest(Severity.WARNING, Version.BASE)
                     .setMessage("Failed to determine Maven activation for profile " + profile.getId()
-                            + " due invalid Maven version: '" + version + "'")
+                            + " due to invalid Maven version: '" + version + "'")
                     .setLocation(activation.getLocation("maven"))
                     .setException(e));
             return false;
@@ -178,9 +178,9 @@ public class MavenVersionProfileActivator implements ProfileActivator {
     }
 
     private static class RangeValue {
-        private String value;
+        private final String value;
 
-        private boolean closed;
+        private final boolean closed;
 
         RangeValue(String value, boolean closed) {
             this.value = value.trim();
