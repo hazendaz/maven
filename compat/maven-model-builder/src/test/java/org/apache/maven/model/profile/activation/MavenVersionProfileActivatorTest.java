@@ -92,6 +92,14 @@ class MavenVersionProfileActivatorTest extends AbstractProfileActivatorTest<Mave
     }
 
     @Test
+    void testExactVersionRange() {
+        Profile profile = newProfile("[4]");
+
+        assertActivation(true, profile, newContext(null, newProperties("4.0.0")));
+        assertActivation(false, profile, newContext(null, newProperties("4.0.1")));
+    }
+
+    @Test
     void testRubbishMavenVersion() {
         Profile profile = newProfile("[4,)");
 

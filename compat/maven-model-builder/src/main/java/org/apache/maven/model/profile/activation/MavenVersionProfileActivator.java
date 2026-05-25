@@ -160,8 +160,18 @@ public class MavenVersionProfileActivator implements ProfileActivator {
 
     private static List<RangeValue> getRange(String range) {
         List<RangeValue> ranges = new ArrayList<>();
+        String trimmedRange = range.trim();
 
-        for (String token : range.split(",")) {
+        if (!trimmedRange.contains(",")
+                && (trimmedRange.startsWith("[") || trimmedRange.startsWith("("))
+                && (trimmedRange.endsWith("]") || trimmedRange.endsWith(")"))) {
+            String value = trimmedRange.substring(1, trimmedRange.length() - 1);
+            ranges.add(new RangeValue(value, trimmedRange.startsWith("[")));
+            ranges.add(new RangeValue(value, trimmedRange.endsWith("]")));
+            return ranges;
+        }
+
+        for (String token : trimmedRange.split(",")) {
             if (token.startsWith("[")) {
                 ranges.add(new RangeValue(token.substring(1), true));
             } else if (token.startsWith("(")) {
