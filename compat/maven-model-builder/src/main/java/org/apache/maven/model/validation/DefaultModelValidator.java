@@ -353,6 +353,11 @@ public class DefaultModelValidator implements ModelValidator {
             validator.accept(jdk);
             stk.pop();
         });
+        root.map(Activation::getMaven).ifPresent(maven -> {
+            stk.push(new ActivationFrame("maven", Optional.empty()));
+            validator.accept(maven);
+            stk.pop();
+        });
     }
 
     private void validate20RawPlugins(

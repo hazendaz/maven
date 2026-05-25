@@ -3149,6 +3149,17 @@
           </description>
         </field>
         <field>
+          <name>maven</name>
+          <version>4.0.0+</version>
+          <type>String</type>
+          <description>
+            Specifies that this profile will be activated when a matching Maven version is detected.
+            For example, {@code 4.0} only activates on Maven versions starting with 4.0,
+            while {@code !4.0} matches any Maven version that does not start with 4.0.
+            Ranges are supported too: {@code [4,)} activates when Maven 4+ is used.
+          </description>
+        </field>
+        <field>
           <name>os</name>
           <version>4.0.0+</version>
           <description>Specifies that this profile will be activated when matching operating system
